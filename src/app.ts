@@ -26,6 +26,7 @@ app.use(
 app.use(express.json());
 
 const uploadsPath = path.resolve("uploads");
+
 if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath);
 }

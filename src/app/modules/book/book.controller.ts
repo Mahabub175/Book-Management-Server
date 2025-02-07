@@ -2,43 +2,31 @@ import { NextFunction, Request, Response } from "express";
 import { uploadService } from "../upload/upload";
 import { bookServices } from "./book.service";
 
-const uploadMiddleware = uploadService.single("coverImage");
-
 const createBookController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  uploadMiddleware(req, res, async (err) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        message: "File upload failed",
-        error: err.message,
-      });
-    }
+  try {
+    const data = req.body;
 
-    try {
-      const data = req.body;
+    const filePath = req.file ? req.file.path : undefined;
 
-      const filePath = req.file ? req.file.path : undefined;
+    const formData = {
+      ...data,
+      coverImage: filePath,
+    };
 
-      const formData = {
-        ...data,
-        attachment: filePath,
-      };
+    const result = await bookServices.createBookService(formData);
 
-      const result = await bookServices.createBookService(formData);
-
-      res.status(200).json({
-        success: true,
-        message: "Book Created Successfully",
-        data: result,
-      });
-    } catch (error: any) {
-      next(error);
-    }
-  });
+    res.status(200).json({
+      success: true,
+      message: "Book Created Successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
 };
 
 const getAllBookController = async (
@@ -124,38 +112,26 @@ const updateSingleBookController = async (
   res: Response,
   next: NextFunction
 ) => {
-  uploadMiddleware(req, res, async (err) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        message: "File upload failed",
-        error: err.message,
-      });
-    }
-    try {
-      const { bookId } = req.params;
-      const data = req.body;
-      const filePath = req.file ? req.file.path : undefined;
+  try {
+    const { bookId } = req.params;
+    const data = req.body;
+    const filePath = req.file ? req.file.path : undefined;
 
-      const bookData = {
-        ...data,
-        attachment: filePath,
-      };
+    const bookData = {
+      ...data,
+      coverImage: filePath,
+    };
 
-      const result = await bookServices.updateSingleBookService(
-        bookId,
-        bookData
-      );
+    const result = await bookServices.updateSingleBookService(bookId, bookData);
 
-      res.status(200).json({
-        success: true,
-        message: "Single Book Updated Successfully!",
-        data: result,
-      });
-    } catch (error: any) {
-      next(error);
-    }
-  });
+    res.status(200).json({
+      success: true,
+      message: "Single Book Updated Successfully!",
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
 };
 
 //Delete single book controller

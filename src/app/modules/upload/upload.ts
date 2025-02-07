@@ -5,10 +5,12 @@ const storage: StorageEngine = multer.diskStorage({
     cb(null, "uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, `${file.originalname}-${Date.now()}`);
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 
-const uploadService = multer({ storage });
+const uploadService = multer({
+  storage,
+});
 
 export { uploadService };

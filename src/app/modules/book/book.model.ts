@@ -9,6 +9,7 @@ const bookSchema = new Schema<IBook>(
       type: String,
       required: true,
       trim: true,
+      unique: true,
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -20,21 +21,21 @@ const bookSchema = new Schema<IBook>(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     publishedAt: {
       type: Schema.Types.Mixed,
       required: true,
       trim: true,
-      unique: true,
     },
     coverImage: {
       type: String,
       trim: true,
+      required: true,
     },
     description: {
       type: String,
       trim: true,
+      required: true,
     },
     price: {
       type: Number,
