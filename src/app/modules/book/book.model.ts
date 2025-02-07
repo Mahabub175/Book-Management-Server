@@ -1,4 +1,4 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { IBook } from "./book.interface";
 import { Status } from "../../interface/global/global.interface";
 
@@ -7,6 +7,12 @@ const bookSchema = new Schema<IBook>(
   {
     name: {
       type: String,
+      required: true,
+      trim: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
       required: true,
       trim: true,
     },

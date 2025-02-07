@@ -1,6 +1,9 @@
+import { Types } from "mongoose";
+
 export interface IBook {
   name: string;
   author: string;
+  user: Types.ObjectId;
   publishedAt: string;
   coverImage: string;
   description: string;

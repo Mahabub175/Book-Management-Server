@@ -9,6 +9,8 @@ router.get("/book/", bookControllers.getAllBookController);
 
 router.get("/book/:bookId/", bookControllers.getSingleBookController);
 
+router.get("/book/user/:userId/", bookControllers.getBooksByUserController);
+
 router.patch("/book/:bookId/", bookControllers.updateSingleBookController);
 
 router.delete("/book/:bookId/", bookControllers.deleteSingleBookController);

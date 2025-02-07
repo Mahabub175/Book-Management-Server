@@ -99,6 +99,25 @@ const getSingleBookController = async (
   }
 };
 
+//Get books by user
+const getBooksByUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { bookId } = req.params;
+    const result = await bookServices.getBooksByUserService(bookId);
+    res.status(200).json({
+      success: true,
+      message: "Books By User Fetched Successfully!",
+      data: result,
+    });
+  } catch (error: any) {
+    next(error);
+  }
+};
+
 //Update single book controller
 const updateSingleBookController = async (
   req: Request,
@@ -191,6 +210,7 @@ export const bookControllers = {
   createBookController,
   getAllBookController,
   getSingleBookController,
+  getBooksByUserController,
   updateSingleBookController,
   deleteSingleBookController,
   deleteManyBooksController,

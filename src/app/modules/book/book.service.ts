@@ -21,7 +21,7 @@ const getAllBookService = async (
   let results;
 
   if (page && limit) {
-    const query = bookModel.find();
+    const query = bookModel.find().populate("user");
     const result = await paginateAndSort(
       query,
       page,
@@ -37,7 +37,7 @@ const getAllBookService = async (
 
     return result;
   } else {
-    results = await bookModel.find().exec();
+    results = await bookModel.find().populate("user").exec();
 
     results = formatResultImage(results, "coverImage");
 
@@ -53,7 +53,7 @@ const getSingleBookService = async (bookId: number | string) => {
     typeof bookId === "string" ? new mongoose.Types.ObjectId(bookId) : bookId;
 
   // Find the book by ID
-  const result = await bookModel.findById(queryId).exec();
+  const result = await bookModel.findById(queryId).populate("user").exec();
   if (!result) {
     throw new Error("Book not found");
   }
@@ -67,6 +67,17 @@ const getSingleBookService = async (bookId: number | string) => {
 
   return result;
 };
+
+const getBooksByUserService = async (userId: string) => {
+  const result = await bookModel.find({ user: userId }).populate("user").exec();
+
+  if (!result || result.length === 0) {
+    throw new Error("No books found for this user");
+  }
+
+  return result;
+};
+
 //Update single book
 const updateSingleBookService = async (
   bookId: string | number,
@@ -125,6 +136,7 @@ export const bookServices = {
   createBookService,
   getAllBookService,
   getSingleBookService,
+  getBooksByUserService,
   updateSingleBookService,
   deleteSingleBookService,
   deleteManyBooksService,
